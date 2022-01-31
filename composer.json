@@ -1,0 +1,23 @@
+{
+  "name": "master-playlist",
+  "description":"Master Playlist is a Web and Mobile application that uses the Music Corgis dataset to create and manage music playlists and favorite songs.",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Cameron Zipp",
+      "email": "Zipp.Cameron@student.greenriver.edu"
+    },
+    {
+      "name": "Abdikafi Jama",
+      "email": ""
+    },
+    {
+      "name": "Pavel Krokhalev",
+      "email": ""
+    }
+  ],
+  "require": {
+    "bcosca/fatfree-core": "dev-master"
+  }
+}
