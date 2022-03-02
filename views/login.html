@@ -6,11 +6,11 @@
     <div class="container">
         <form method="post" class="form-horizontal box">
                 <h1>Login</h1>
-                <input type="text" name="username" placeholder="Username" value="{{ @temp_username }}">
+                <input type="text" name="username" placeholder="Username" value="{{ @POST.username }}">
                 <check if="{{ isset(@errors['username']) }}">
                     <small class="text-danger">{{ @errors['username'] }}</small>
                 </check>
-                <input type="password" name="password" placeholder="Password" value="{{ @temp_password }}">
+                <input type="password" name="password" placeholder="Password" value="{{ @POST.password }}">
                 <check if="{{ isset(@errors['password']) }}">
                     <small class="text-danger">{{ @errors['password'] }}</small>
                 </check>

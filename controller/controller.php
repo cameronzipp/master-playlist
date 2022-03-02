@@ -43,9 +43,6 @@ class Controller
                 $this->_f3->set('errors["username"]', 'Enter a username.');
             }
 
-            $this->_f3->set('temp_username', $_POST['username']);
-            $this->_f3->set('temp_password', $_POST['password']);
-
             if (empty($this->_f3->get('errors'))) {
                 $this->_f3->reroute('/');
             }
