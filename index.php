@@ -12,7 +12,7 @@ require_once('vendor/autoload.php');
 
 // Start the session
 session_start();
-var_dump($_SESSION);
+//var_dump($_SESSION);
 
 //create instance of the base class
 $f3 = Base::instance();
