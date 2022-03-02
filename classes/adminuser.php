@@ -1,6 +1,6 @@
 <?php
 
-class AdminUser
+class AdminUser extends User
 {
 
 }

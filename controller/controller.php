@@ -23,15 +23,15 @@ class Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // if there is a username
             if (!empty($_POST['username'])) {
-                $password = Util::getPassword($_POST['username']);
+                $account = Util::getAccount($_POST['username']);
                 // if there is no saved "account"
-                if ($password === 0) {
+                if ($account === null) {
                     $this->_f3->set('errors["username"]', 'Could not find your Master Playlist Account.');
                 } else {
                     // if there is a password
                     if (!empty($_POST['password'])) {
-                        if ($_POST['password'] === $password) {
-                            $_SESSION['logged'] = $_POST['username'];
+                        if ($_POST['password'] === $account->getPassword()) {
+                            $_SESSION['logged'] = $account;
                         } else {
                             $this->_f3->set('errors["password"]', 'Password was wrong. Please try again.');
                         }

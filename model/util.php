@@ -2,19 +2,19 @@
 
 class Util
 {
-    static function getPassword($username)
+    static function getAccount($username): ?User
     {
-        // { ["username"]=> string ["password"]=> string }
         foreach (DataLayer::getUsers() as $saved_user) {
-            if ($username === $saved_user['username']) {
-                return $saved_user['password'];
+            if ($username === $saved_user->getUsername()) {
+                return $saved_user;
             }
         }
         foreach (DataLayer::getAdmins() as $saved_admin) {
-            if ($username === $saved_admin['username']) {
-                return $saved_admin['password'];
+            if ($username === $saved_admin->getUsername()) {
+                return $saved_admin;
             }
         }
-        return 0;
+
+        return null;
     }
 }

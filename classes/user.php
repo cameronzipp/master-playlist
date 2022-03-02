@@ -2,7 +2,7 @@
 
 class User
 {
-    //fields, properties, data members, instance variables
+    // fields, properties, data members, instance variables
     private string $_id;
     private string $_username;
     private string $_password;
