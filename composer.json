@@ -18,7 +18,9 @@
     }
   ],
   "require": {
-    "bcosca/fatfree-core": "dev-master"
+    "bcosca/fatfree-core": "dev-master",
+    "php-ds/php-ds": "^1.4",
+    "myclabs/php-enum": "^1.8"
   },
   "autoload": {
     "classmap": ["classes/", "model/", "controller/"]

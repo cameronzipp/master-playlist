@@ -31,7 +31,7 @@ class Controller
                     // if there is a password
                     if (!empty($_POST['password'])) {
                         if ($_POST['password'] === $account->getPassword()) {
-                            $_SESSION['logged'] = $account;
+                            $account->login();
                         } else {
                             $this->_f3->set('errors["password"]', 'Password was wrong. Please try again.');
                         }

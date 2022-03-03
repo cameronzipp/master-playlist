@@ -1,5 +1,7 @@
 <?php
 
+use Ds\Map;
+
 class User
 {
     // fields, properties, data members, instance variables
@@ -7,21 +9,29 @@ class User
     private string $_username;
     private string $_password;
     private Playlist $_playlist;
+    private Map $_friends;
 
-    function __construct($username, $password)
+    function __construct($username, $password, $playlist = null, $friends = null)
     {
         $this->_username = $username;
         $this->_password = $password;
+        $this->_playlist = $playlist == null ? new Playlist() : $playlist;
+        $this->_friends = $friends == null ? new Map() : $friends;
     }
 
     function login()
     {
-        $_SESSION['logged'] = $this->getId();
+        $_SESSION['logged'] = $this;
     }
 
     function logout()
     {
-        $_SESSION['logged'] = '';
+        session_start();
+        session_unset();
+        session_destroy();
+        session_write_close();
+        setcookie(session_name(),'',0,'/');
+        session_regenerate_id(true);
     }
 
     function updatePassword($oldPassword, $newPassword)
@@ -105,5 +115,31 @@ class User
     public function setPlaylist($playlist)
     {
         $this->_playlist = $playlist;
+    }
+
+    /**
+     * @return User[] array of friends
+     */
+    public function getFriends(): array
+    {
+        return $this->_friends;
+    }
+
+    /**
+     * @param User $friend
+     */
+    public function addFriend(User $friend): void
+    {
+        $this->_friends->put($friend->getId(), $friend);
+    }
+
+    /**
+     * @param string $friend_id
+     */
+    public function removeFriend(string $friend_id): void
+    {
+        if ($this->_friends->hasKey($friend_id)) {
+            $this->_friends->remove($friend_id);
+        }
     }
 }

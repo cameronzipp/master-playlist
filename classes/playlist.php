@@ -46,7 +46,7 @@ class Playlist
     }
 
     /**
-     * @return Publicity
+     * @return Publicity publicity type
      */
     public function getPublicity()
     {
