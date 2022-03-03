@@ -61,7 +61,7 @@ class Controller
     public function logout()
     {
         if (!empty($_SESSION['logged'])) {
-            unset($_SESSION['logged']);
+            $_SESSION['logged']->logout();
         }
         $this->_f3->reroute('/login');
     }
