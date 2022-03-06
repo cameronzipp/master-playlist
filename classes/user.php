@@ -23,7 +23,10 @@ class User
     {
         $_SESSION['logged'] = $this;
     }
-
+    function register()
+    {
+        $_SESSION['logged'] = $this;
+    }
     function logout()
     {
         session_destroy();
