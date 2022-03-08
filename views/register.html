@@ -1,24 +1,21 @@
-<include href="views/header2.html"></include>
+<include href="views/header.html"></include>
 <body>
-<include href="views/navbar.html"></include>
-<include href="views/footer.html"></include>
+    <include href="views/navbar.html"></include>
+    <include href="views/footer.html"></include>
 
-<div class="container ">
-    <form method="post" class="form-horizontal box">
-        <h1>Sign up</h1>
-        <input type="text" name="username" placeholder="Username" value="{{ @POST.username }}">
-        <check if="{{ isset(@errors['username']) }}">
-            <small class="text-danger">{{ @errors['username'] }}</small>
-        </check>
-        <input type="password" name="password" placeholder="Password" value="{{ @POST.password }}">
-        <check if="{{ isset(@errors['password']) }}">
-            <small class="text-danger">{{ @errors['password'] }}</small>
-        </check>
-        <input type="submit" value="Submit"><br>
-
-        <!--<a type="button" class="btn btn-primary" href="register">NEED AN ACCOUNT?</a>-->
-
-    </form>
-</div>
+    <div class="container">
+        <form method="post" class="form-horizontal box box-register">
+                <h1>Sign up</h1>
+                <input type="text" name="username" placeholder="Username" value="{{ @POST.username }}">
+                <check if="{{ isset(@errors['username']) }}">
+                    <small class="text-danger">{{ @errors['username'] }}</small>
+                </check>
+                <input type="password" name="password" placeholder="Password" value="{{ @POST.password }}">
+                <check if="{{ isset(@errors['password']) }}">
+                    <small class="text-danger">{{ @errors['password'] }}</small>
+                </check>
+                <input type="submit" value="Register">
+        </form>
+    </div>
 </body>
 </html>
