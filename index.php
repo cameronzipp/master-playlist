@@ -31,7 +31,7 @@ $f3->route('GET|POST /login', function($f3, $params) {
 });
 
 //define register route
-$f3->route('GET /register', function($f3, $params) {
+$f3->route('GET|POST /register', function($f3, $params) {
     global $con;
     $con->register();
 });
