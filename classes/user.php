@@ -25,7 +25,12 @@ class User
     }
     function register()
     {
-        $_SESSION['logged'] = $this;
+        // add user to database
+        $users = DataLayer::getUsers();
+        array_push($users, $this);
+
+        // login
+        $this->login();
     }
     function logout()
     {

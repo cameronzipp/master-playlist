@@ -9,7 +9,10 @@ class Validator
      */
     static function validUsername($username)
     {
-        return !empty($username) && preg_match("/^[^\d][\w\d-]{3,16}$/", $username) === 1;
+        // is not empty, and
+        // does not start with a number or whitespace, and is
+        // made up of more than 3 but less than 16 letters, numbers, and dashes
+        return !empty($username) && preg_match("/^[^\d\W][\w\d-]{2,16}$/", $username) === 1;
     }
 
     /**
@@ -19,6 +22,9 @@ class Validator
      */
     static function validPassword($password)
     {
+        // is not empty, and
+        // allows the use of letters, numbers, and specific symbols
+        // no less than 10 characters, no more than 64 characters
         return !empty($password) && preg_match("/^[\w\d!@#$%^&*]{10,64}$/", $password) === 1;
     }
 }

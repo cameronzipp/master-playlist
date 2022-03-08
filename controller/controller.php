@@ -61,48 +61,30 @@ class Controller
             //If the form has been posted
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-                // = $f3->get('POST.food');
-                $username= $_POST['username'];
-                $password= $_POST['username'];
-              //  $meal = $_POST['meal'];
-
-                //Instantiate an order object
-                //$order = new Order();
-                //$_SESSION['order'] = $order;
-
-                $_SESSION['User'] =new User($username,$password,);
+                $username = $_POST['username'];
+                $password = $_POST['password'];
 
                 //Validate the data
-                if(Validator::validUsername($username)) {
-
-                    //Add the data to the session variable
-                    $_SESSION['User']->setUsername($username);
-                }
-                else {
-
+                if(!Validator::validUsername($username)) {
                     //Set an error
-                    $this->_f3->set('errors["username"]', 'Please enter a correct format');
+                    $this->_f3->set('errors["username"]', '3-16 characters, does not start with a number');
                 }
 
-                if(Validator::validPassword($password)) {
-
-                    //Add the data to the session variable
-                    $_SESSION['User']->setPassword($password);
-                }
-                else {
-
+                if(!Validator::validPassword($password)) {
                     //Set an error
-                    $this->_f3->set('errors["password"]', 'password format is invalid');
+                    $this->_f3->set('errors["password"]', '10-64 characters, includes any letter/number or !@#$%^&* characters');
                 }
 
                 //Redirect user to next page if there are no errors
                 if (empty($this->_f3->get('errors'))) {
-                    $this->_f3->reroute('login');
+                    $account = new User($username, $password);
+                    $account->register();
+                    $this->_f3->reroute('/');
                 }
             }
 
-            $this->_f3->set('password', $password);
             $this->_f3->set('username', $username);
+            $this->_f3->set('password', $password);
 
 
             $view = new Template();
