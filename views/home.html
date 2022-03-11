@@ -2,14 +2,43 @@
 <body>
     <include href="views/navbar.html"></include>
 
-    <div class="container">
+    <div class="container py-4">
         <h1>Find Songs</h1>
-        <br>
-        <div id="songData">
-
-        </div>
-        <br>
+        <table id="songData">
+            <thead>
+                <tr>
+                    <th>Artist</th>
+                    <th>Genre</th>
+                    <th>Song</th>
+                    <th>Song Duration</th>
+                    <th>Release Year</th>
+                </tr>
+            </thead>
+            <tbody>
+            <repeat group="{{ @songs }}" value="{{ @item }}">
+                <tr>
+                    <td>{{ @item->artist->name }}</td>
+                    <td>{{ @item->artist->terms }}</td>
+                    <td>{{ @item->song->title }}</td>
+                    <td>{{ number_format(@item->song->duration / 60, 2) }} minutes</td>
+                    <td>{{ @item->song->year == 0 ? 'Unknown' : @item->song->year }}</td>
+                </tr>
+            </repeat>
+            </tbody>
+            <tfoot>
+                <i class="bi bi-plus"></i>
+            </tfoot>
+        </table>
     </div>
     <include href="views/footer.html"></include>
+    <script>
+        $(document).ready(function () {
+            $('#songData').DataTable({
+                searching: false,
+                ordering: false,
+                lengthChange: false
+            });
+        })
+    </script>
 </body>
 </html>

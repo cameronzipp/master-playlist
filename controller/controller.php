@@ -14,6 +14,18 @@ class Controller
 
     public function home()
     {
+        $music_json = file_get_contents('music.json');
+
+        $decoded_json = json_decode($music_json, false);
+
+        $decoded_json = array_splice($decoded_json, 0, 25);
+
+//        echo "<pre>";
+//        print_r($decoded_json);
+//        echo "</pre>";
+
+        $this->_f3->set("songs", $decoded_json);
+
         $view = new Template();
         echo $view->render('views/home.html');
     }
