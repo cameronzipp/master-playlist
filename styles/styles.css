@@ -30,6 +30,10 @@ button {
 .loginButtons:not([href]) {
     color: white;
 }
+footer {
+    position: fixed;
+    bottom: 0;
+}
 .box {
     width: 400px;
     padding: 40px;
