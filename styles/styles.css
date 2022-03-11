@@ -8,6 +8,28 @@ h1 {
 button {
     margin: 15px;
 }
+.loginButtons {
+    border: 0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #2ecc71;
+    padding: 14px 40px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+    cursor: pointer;
+}
+.loginButtons:hover {
+    background: #2ecc71;
+    text-decoration-line: none;
+    color: white;
+}
+.loginButtons:not([href]) {
+    color: white;
+}
 .box {
     width: 400px;
     padding: 40px;
@@ -41,25 +63,4 @@ button {
 .box input[type= "text"]:focus, .box input[type= "password"]:focus {
     width: 280px;
     border-color: #2ecc71;
-}
-.box input[type= "submit"] {
-    border: 0;
-    background: none;
-    display: block;
-    margin: 20px auto;
-    text-align: center;
-    border: 2px solid #2ecc71;
-    padding: 14px 40px;
-    outline: none;
-    color: white;
-    border-radius: 24px;
-    transition: 0.25s;
-    cursor: pointer;
-}
-.box input[type= "submit"]:hover {
-    background: #2ecc71;
-}
-
-.box-register {
-    background: #1c7430;
 }

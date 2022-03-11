@@ -1,8 +1,6 @@
 <include href="views/header.html"></include>
 <body>
     <include href="views/navbar.html"></include>
-    <include href="views/footer.html"></include>
-
     <div class="container">
         <form method="post" class="form-horizontal box">
             <h1>Login</h1>
@@ -10,19 +8,20 @@
             <check if="{{ isset(@errors['username']) }}">
                 <small class="text-danger">{{ @errors['username'] }}</small>
             </check>
-            <input type="password" name="password" placeholder="Password" value="{{ @POST.password }}">
+            <input type="password" autocomplete="off" name="password" placeholder="Password" value="{{ @POST.password }}">
             <check if="{{ isset(@errors['password']) }}">
                 <small class="text-danger">{{ @errors['password'] }}</small>
             </check>
             <div class="row">
                 <div class="col">
-                    <input type="submit" value="Login">
+                    <a type="submit" class="loginButtons" href="">Login</a>
                 </div>
                 <div class="col">
-                    <input type="submit" value="Register">
+                    <a type="submit" class="loginButtons" href="register">Register</a>
                 </div>
             </div>
         </form>
     </div>
+    <include href="views/footer.html"></include>
 </body>
 </html>
