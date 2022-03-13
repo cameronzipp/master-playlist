@@ -2,6 +2,18 @@
 
 class Validator
 {
+
+    /**
+     * Validates whether the account exists. Returns true if it does, false if it doesn't
+     * @param string $username
+     * @return bool true if account exists, false if it does not
+     */
+    static function accountExists(string $username): bool
+    {
+        global $dataLayer;
+        return !($dataLayer->getUserByUsername($username) === false);
+    }
+
     /**
      * Validates usernames
      * @param string $username

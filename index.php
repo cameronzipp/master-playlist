@@ -17,6 +17,7 @@ session_start();
 //create instance of the base class
 $f3 = Base::instance();
 $con = new Controller($f3);
+$dataLayer = new DataLayer();
 
 //define default route
 $f3->route('GET /', function($f3, $params) {

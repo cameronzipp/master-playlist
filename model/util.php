@@ -2,19 +2,21 @@
 
 class Util
 {
-    static function getAccount($username): ?User
+    /**
+     * Converts the given array from the database into a User|AdminUser object
+     * @param array $userArray the array given from the database
+     * @return User|AdminUser the converted user object
+     */
+    static function convert_user_array(array $userArray)
     {
-        foreach (DataLayer::getUsers() as $saved_user) {
-            if ($username === $saved_user->getUsername()) {
-                return $saved_user;
-            }
-        }
-        foreach (DataLayer::getAdmins() as $saved_admin) {
-            if ($username === $saved_admin->getUsername()) {
-                return $saved_admin;
-            }
+        $user = null;
+
+        if ($userArray['admin']) {
+            $user = new AdminUser($userArray['user_id'], $userArray['username'], $userArray['password']);
+        } else {
+            $user = new User($userArray['user_id'], $userArray['username'], $userArray['password']);
         }
 
-        return null;
+        return $user;
     }
 }
