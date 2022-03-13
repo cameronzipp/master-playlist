@@ -17,11 +17,11 @@
             <tbody>
             <repeat group="{{ @songs }}" value="{{ @item }}">
                 <tr>
-                    <td>{{ @item->artist->name }}</td>
-                    <td>{{ @item->artist->terms }}</td>
-                    <td>{{ @item->song->title }}</td>
-                    <td>{{ number_format(@item->song->duration / 60, 2) }} minutes</td>
-                    <td>{{ @item->song->year == 0 ? 'Unknown' : @item->song->year }}</td>
+                    <td>{{ @item.artist.name }}</td>
+                    <td>{{ @item.artist.terms }}</td>
+                    <td>{{ @item.song.title }}</td>
+                    <td>{{ number_format(@item.song.duration / 60, 2) }} minutes</td>
+                    <td>{{ @item.song.year == 0 ? 'Unknown' : @item.song.year }}</td>
                 </tr>
             </repeat>
             </tbody>

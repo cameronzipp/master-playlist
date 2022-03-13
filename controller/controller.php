@@ -16,7 +16,7 @@ class Controller
     {
         $music_json = file_get_contents('music.json');
 
-        $decoded_json = json_decode($music_json, false);
+        $decoded_json = json_decode($music_json, true);
 
         $decoded_json = array_splice($decoded_json, 0, 25);
 
