@@ -96,7 +96,7 @@ class Controller
                 //Redirect user to next page if there are no errors
                 if (empty($this->_f3->get('errors'))) {
                     global $dataLayer;
-                    $account = new User($dataLayer->getLastUserId(), $username, $password);
+                    $account = new User($username, $password);
                     $account->register();
                     $this->_f3->reroute('/');
                 }

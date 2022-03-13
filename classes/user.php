@@ -11,9 +11,8 @@ class User
     private Playlist $_playlist;
     private Map $_friends;
 
-    function __construct($id, $username, $password, $playlist = null, $friends = null)
+    function __construct($username, $password, $playlist = null, $friends = null)
     {
-        $this->_id = $id;
         $this->_username = $username;
         $this->_password = $password;
         $this->_playlist = $playlist == null ? new Playlist() : $playlist;
@@ -27,7 +26,7 @@ class User
     function register()
     {
         global $dataLayer;
-        $dataLayer->insertUser($this);
+        $this->setId($dataLayer->insertUser($this));
 
         // login
         $this->login();

@@ -12,10 +12,11 @@ class Util
         $user = null;
 
         if ($userArray['admin']) {
-            $user = new AdminUser($userArray['user_id'], $userArray['username'], $userArray['password']);
+            $user = new AdminUser($userArray['username'], $userArray['password']);
         } else {
-            $user = new User($userArray['user_id'], $userArray['username'], $userArray['password']);
+            $user = new User($userArray['username'], $userArray['password']);
         }
+        $user->setId($userArray['user_id']);
 
         return $user;
     }
