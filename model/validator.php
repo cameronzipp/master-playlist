@@ -39,4 +39,19 @@ class Validator
         // no less than 10 characters, no more than 64 characters
         return !empty($password) && preg_match("/^[\w\d!@#$%^&*]{10,64}$/", $password) === 1;
     }
+
+    /**
+     * Validates a users email
+     * @param $email
+     * @return void
+     */
+    static function validEmail($email): bool
+    {
+        //is not empty
+        //includes the @ sign and checks if there is a duplicate
+        if (preg_match("/^[^\s@]+@[^\s@]+$/", $email) === 1 && strlen($email) > 6 && strlen($email) < 100) {
+            return true;
+        }
+        return false;
+    }
 }

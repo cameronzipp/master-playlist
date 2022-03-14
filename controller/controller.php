@@ -69,46 +69,52 @@ class Controller
 
     public function register()
     {
-            //Initialize input variables
-            $username = "";
-            $password = "";
+        //Initialize input variables
+        $username = "";
+        $password = "";
+        $email = "";
 
-            //If the form has been posted
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        //If the form has been posted
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-                $username = $_POST['username'];
-                $password = $_POST['password'];
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            $email = $_POST['email'];
 
-                //Validate the data
-                if(!Validator::validUsername($username)) {
-                    //Set an error
-                    $this->_f3->set('errors["username"]', '3-16 characters, does not start with a number');
-                } else {
-                    if (Validator::accountExists($username)) {
-                        $this->_f3->set('errors["username"]', 'This username is already taken.');
-                    }
-                }
-
-                if(!Validator::validPassword($password)) {
-                    //Set an error
-                    $this->_f3->set('errors["password"]', '10-64 characters, includes any letter/number or !@#$%^&* characters');
-                }
-
-                //Redirect user to next page if there are no errors
-                if (empty($this->_f3->get('errors'))) {
-                    global $dataLayer;
-                    $account = new User($username, $password);
-                    $account->register();
-                    $this->_f3->reroute('/');
+            //Validate the data
+            if(!Validator::validUsername($username)) {
+                //Set an error
+                $this->_f3->set('errors["username"]', '3-16 characters, does not start with a number');
+            } else {
+                if (Validator::accountExists($username)) {
+                    $this->_f3->set('errors["username"]', 'This username is already taken.');
                 }
             }
 
-            $this->_f3->set('username', $username);
-            $this->_f3->set('password', $password);
+            if(!Validator::validPassword($password)) {
+                //Set an error
+                $this->_f3->set('errors["password"]', '10-64 characters, includes any letter/number or !@#$%^&* characters');
+            }
+
+            if (!Validator::validEmail($email)) {
+                //set an error
+                $this->_f3->set('errors["email"]', 'Please enter a valid email');
+            }
+            //Redirect user to next page if there are no errors
+            if (empty($this->_f3->get('errors'))) {
+                global $dataLayer;
+                $account = new User($username, $password, $email);
+                $account->register();
+                $this->_f3->reroute('/');
+            }
+        }
+
+        $this->_f3->set('username', $username);
+        $this->_f3->set('password', $password);
 
 
-            $view = new Template();
-            echo $view->render('views/register.html');
+        $view = new Template();
+        echo $view->render('views/register.html');
     }
 
     public function logout()

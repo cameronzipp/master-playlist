@@ -52,8 +52,6 @@ class DataLayer
         $this->_api = json_decode($music_json, true);
     }
 
-    }
-
     /**
      * inserts a User object into the database
      * @param User $user the user to insert
