@@ -36,6 +36,7 @@ class DataLayer
 {
     // database connection object
     private PDO $_dbh;
+    private array $_api;
 
     public function __construct()
     {
@@ -46,6 +47,11 @@ class DataLayer
         catch (PDOException $exception) {
             die("Error connecting to DB " . $exception->getMessage());
         }
+
+        $music_json = file_get_contents('music.json');
+        $this->_api = json_decode($music_json, true);
+    }
+
     }
 
     /**
