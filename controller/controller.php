@@ -18,6 +18,7 @@ class Controller
 
         $decoded_json = json_decode($music_json, true);
 
+        shuffle($decoded_json);
         $decoded_json = array_splice($decoded_json, 0, 25);
 
 //        echo "<pre>";
