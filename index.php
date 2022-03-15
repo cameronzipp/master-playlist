@@ -25,6 +25,16 @@ $f3->route('GET /', function($f3, $params) {
     $con->home();
 });
 
+$f3->route('GET /search', function($f3, $params) {
+    global $con;
+    $con->search();
+});
+
+$f3->route('GET /api/song/@action/@song_id', function($f3, $params) {
+    global $con;
+    $con->api();
+});
+
 //define login route
 $f3->route('GET|POST /login', function($f3, $params) {
     global $con;
@@ -42,6 +52,11 @@ $f3->route('GET /logout', function($f3, $params) {
     global $con;
     $con->logout();
 });
+
+//$f3->route('GET /temp/@id', function ($f3, $params) {
+//    global $con;
+//    $con->temp();
+//});
 
 //run fat-free
 $f3->run();

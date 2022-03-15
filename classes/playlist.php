@@ -8,10 +8,16 @@ class Playlist
     private array $_song_ids;
     private Publicity $_publicity;
 
-    public function __construct(array $song_ids)
+    /**
+     * @param string $_name
+     * @param Publicity $_publicity
+     */
+    public function __construct(string $_name, Publicity $_publicity)
     {
-        $this->_song_ids = $song_ids;
+        $this->_name = $_name;
+        $this->_publicity = $_publicity;
     }
+
 
     /**
      * @return mixed
@@ -37,6 +43,35 @@ class Playlist
         return $this->_song_ids;
     }
 
+    public function setSongIds(array $song_ids)
+    {
+        $this->_song_ids = $song_ids;
+    }
+
+    public function addSong($song_id)
+    {
+        if (in_array($song_id, $this->_song_ids)) {
+            return false;
+        }
+
+        global $dataLayer;
+        $dataLayer->insertSongToPlaylist($this->_id, $song_id);
+
+        array_push($this->_song_ids, $song_id);
+    }
+
+    public function removeSong($song_id)
+    {
+        if (!in_array($song_id, $this->_song_ids)) {
+            return false;
+        }
+
+        global $dataLayer;
+        $dataLayer->removeSongFromPlaylist($this->_id, $song_id);
+
+        $this->_song_ids = array_diff($this->_song_ids, [$song_id]);
+    }
+
     /**
      * @return mixed
      */
@@ -53,10 +88,15 @@ class Playlist
         return $this->_creation_date;
     }
 
+    public function setCreationDate($creation_date)
+    {
+        $this->_creation_date = $creation_date;
+    }
+
     /**
      * @return Publicity publicity type
      */
-    public function getPublicity()
+    public function getPublicity(): Publicity
     {
         return $this->_publicity;
     }

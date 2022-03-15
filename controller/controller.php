@@ -14,21 +14,76 @@ class Controller
 
     public function home()
     {
-        $music_json = file_get_contents('music.json');
+        global $dataLayer;
 
-        $decoded_json = json_decode($music_json, true);
+        if (empty($_SESSION['logged'])) {
+            $playlist = new Playlist("Example Playlist", Publicity::PUBLIC());
+            $songs = array_map(function ($item) {return $item['song']['id'];}, $dataLayer->getSongs(50));
+            $playlist->setSongIds($songs);
+        } else {
+            $playlist = $_SESSION['logged']->getPlaylist();
+        }
 
-        shuffle($decoded_json);
-        $decoded_json = array_splice($decoded_json, 0, 25);
-
-//        echo "<pre>";
-//        print_r($decoded_json);
-//        echo "</pre>";
-
-        $this->_f3->set("songs", $decoded_json);
+        $this->_f3->set("playlist", $playlist);
+        $this->_f3->set("songs", $dataLayer->getSongsFromIds($playlist->getSongIds()));
 
         $view = new Template();
         echo $view->render('views/home.html');
+    }
+
+    public function search()
+    {
+        if (empty($_SESSION['logged'])) {
+            $this->_f3->reroute("/login");
+        }
+
+        global $dataLayer;
+
+        $playlist = new Playlist("All Songs", Publicity::PUBLIC());
+        $songs = array_map(function ($item) {return $item['song']['id'];}, $dataLayer->getSongs());
+        $playlist->setSongIds($songs);
+
+        $this->_f3->set("playlist", $playlist);
+        $this->_f3->set("songs", $dataLayer->getSongsFromIds($playlist->getSongIds()));
+
+        $view = new Template();
+        echo $view->render('views/home.html');
+    }
+
+    public function api()
+    {
+        if (empty($_SESSION['logged'])) {
+            $this->_f3->reroute('/login');
+        }
+
+        $actions = ["add", "remove"];
+        $params = $this->_f3->get("PARAMS");
+
+        $action = $params['action'];
+        $song_id = $params['song_id'];
+
+        if (empty($song_id)) {
+            die("Invalid ID: " . $song_id);
+        }
+        if (empty($action) || !in_array($action, $actions)) {
+            $str = "Invalid action: " . $action . "<br>";
+            $str .= "Available actions: " . implode(", ", $actions);
+            die($str);
+        }
+
+        global $dataLayer;
+        // add
+        if ($action === $actions[0]) {
+            $_SESSION['logged']->getPlaylist()->addSong($song_id);
+        }
+        // remove
+        else if ($action === $actions[1]) {
+            $_SESSION['logged']->getPlaylist()->removeSong($song_id);
+        }
+
+        $previous = $this->_f3->get('GET.prev');
+        if (!empty($previous))
+        $this->_f3->reroute($previous);
     }
 
     public function login()
@@ -103,7 +158,7 @@ class Controller
             //Redirect user to next page if there are no errors
             if (empty($this->_f3->get('errors'))) {
                 global $dataLayer;
-                $account = new User($username, $password, $email);
+                $account = new User($email, $username, $password);
                 $account->register();
                 $this->_f3->reroute('/');
             }
@@ -111,6 +166,7 @@ class Controller
 
         $this->_f3->set('username', $username);
         $this->_f3->set('password', $password);
+        $this->_f3->set('email', $email);
 
 
         $view = new Template();

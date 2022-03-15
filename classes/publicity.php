@@ -2,7 +2,12 @@
 
 use MyCLabs\Enum\Enum;
 
-abstract class Publicity extends Enum
+/**
+ * @method static Publicity PUBLIC()
+ * @method static Publicity PRIVATE()
+ * @method static Publicity FRIENDS_ONLY()
+ */
+final class Publicity extends Enum
 {
     private const PUBLIC = 'public';
     private const PRIVATE = 'private';

@@ -6,27 +6,31 @@ class User
 {
     // fields, properties, data members, instance variables
     private string $_id;
+    private string $_email;
     private string $_username;
     private string $_password;
     private Playlist $_playlist;
-    private Map $_friends;
+    private array $_friends;
 
-    function __construct($username, $password, $playlist = null, $friends = null)
+    function __construct($email, $username, $password)
     {
+        $this->_email = $email;
         $this->_username = $username;
         $this->_password = $password;
-        $this->_playlist = $playlist == null ? new Playlist() : $playlist;
-        $this->_friends = $friends == null ? new Map() : $friends;
     }
 
     function login()
     {
         $_SESSION['logged'] = $this;
+        global $dataLayer;
+        $this->setPlaylist(Util::convert_playlist_array($dataLayer->getPlaylistFromUserId($this->getId())));
     }
     function register()
     {
         global $dataLayer;
         $this->setId($dataLayer->insertUser($this));
+        $playlistId = $dataLayer->insertPlaylist($this);
+        $this->setPlaylist(Util::convert_playlist_array($dataLayer->getPlaylist($playlistId)));
 
         // login
         $this->login();
@@ -74,7 +78,22 @@ class User
     /**
      * @return string
      */
-    public function getUsername()
+    public function getEmail(): string
+    {
+        return $this->_email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail(string $email)
+    {
+        $this->_email = $email;
+    }
+    /**
+     * @return string
+     */
+    public function getUsername(): string
     {
         return $this->_username;
     }
@@ -82,7 +101,7 @@ class User
     /**
      * @param string $username
      */
-    public function setUsername($username)
+    public function setUsername(string $username)
     {
         $this->_username = $username;
     }
@@ -90,7 +109,7 @@ class User
     /**
      * @return string
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->_password;
     }
@@ -106,7 +125,7 @@ class User
     /**
      * @return Playlist
      */
-    public function getPlaylist()
+    public function getPlaylist(): Playlist
     {
         return $this->_playlist;
     }
@@ -114,13 +133,13 @@ class User
     /**
      * @param Playlist $playlist
      */
-    public function setPlaylist($playlist)
+    public function setPlaylist(Playlist $playlist)
     {
         $this->_playlist = $playlist;
     }
 
     /**
-     * @return User[] array of friends
+     * @return array array of friends
      */
     public function getFriends(): array
     {
@@ -128,11 +147,11 @@ class User
     }
 
     /**
-     * @param User $friend
+     * @param string $friend_id
      */
-    public function addFriend(User $friend): void
+    public function addFriend(string $friend_id): void
     {
-        $this->_friends->put($friend->getId(), $friend);
+
     }
 
     /**
@@ -140,8 +159,6 @@ class User
      */
     public function removeFriend(string $friend_id): void
     {
-        if ($this->_friends->hasKey($friend_id)) {
-            $this->_friends->remove($friend_id);
-        }
+
     }
 }
