@@ -53,12 +53,6 @@ $f3->route('GET /logout', function($f3, $params) {
     $con->logout();
 });
 
-//define logout route
-$f3->route('GET /dataTableProcessing', function($f3, $params) {
-    global $con;
-    $con->dataTablesProcessing();
-});
-
 //$f3->route('GET /temp/@id', function ($f3, $params) {
 //    global $con;
 //    $con->temp();

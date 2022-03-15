@@ -180,30 +180,4 @@ class Controller
         }
         $this->_f3->reroute('/login');
     }
-
-    public function dataTablesProcessing()
-    {
-        global $dataLayer;
-        $songs = $dataLayer->getSongs();
-        $object = array("data"=>array());
-        foreach($songs as $item)
-        {
-            if (!empty($_SESSION['logged']) && !in_array($item['song']['id'], $_SESSION['logged']->getPlaylist()->getSongIds())) {
-                $songToggle = "<a href=\"" . $this->_f3->get('BASE') . "/api/song/add/" . $item['song']['id'] . "?prev=" . $this->_f3->get('PATH') . "\">Add</a>";
-            } else {
-                $songToggle = "<a href=\"" . $this->_f3->get('BASE') . "/api/song/remove/" . $item['song']['id'] . "?prev=" . $this->_f3->get('PATH') . "\">Remove</a>";
-            }
-            $temp = array(
-                $songToggle,
-                $item['song']['title'],
-                $item['artist']['name'],
-                $item['artist']['terms'],
-                "" . number_format($item['song']['duration'] / 60, 2) . " mins",
-                $item['song']['year'] == 0 ? "Unknown" : $item['song']['year']
-            );
-            array_push($object["data"], $temp);
-        }
-        echo json_encode($object);
-
-    }
 }

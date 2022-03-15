@@ -15,6 +15,25 @@
                     <th>Release Year</th>
                 </tr>
             </thead>
+            <tbody>
+            <repeat group="{{ @songs }}" value="{{ @item }}">
+                <tr>
+                    <check if="!empty(@SESSION.logged) && !in_array(@item.song.id, @SESSION.logged->getPlaylist()->getSongIds())">
+                        <true>
+                            <td><a href="{{ @BASE }}/api/song/add/{{ @item.song.id }}?prev={{ @PATH }}">Add</a></td>
+                        </true>
+                        <false>
+                            <td><a href="{{ @BASE }}/api/song/remove/{{ @item.song.id }}?prev={{ @PATH }}">Remove</a></td>
+                        </false>
+                    </check>
+                    <td>{{ @item.song.title }}</td>
+                    <td>{{ @item.artist.name }}</td>
+                    <td>{{ @item.artist.terms }}</td>
+                    <td>{{ number_format(@item.song.duration / 60, 2) }} mins</td>
+                    <td>{{ @item.song.year == 0 ? 'Unknown' : @item.song.year }}</td>
+                </tr>
+            </repeat>
+            </tbody>
             <tfoot>
                 <i class="bi bi-plus"></i>
             </tfoot>
@@ -27,8 +46,7 @@
                 <check if="{{ substr(@PATH, 0, strlen(@PATH)) === '/' }}">
                     searching: false,
                 </check>
-                lengthChange: false,
-                ajax: '{{ @BASE }}/dataTableProcessing'
+                lengthChange: false
             });
         })
     </script>
