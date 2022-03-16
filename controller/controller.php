@@ -14,8 +14,9 @@ class Controller
 
     public function home()
     {
-        global $dataLayer;
+        $this->_f3->set("SESSION.prev", $this->_f3->get("PATH"));
 
+        global $dataLayer;
         if (empty($_SESSION['logged'])) {
             $playlist = new Playlist("Example Playlist", Publicity::PUBLIC());
             $songs = array_map(function ($item) {return $item['song']['id'];}, $dataLayer->getSongs(50));
@@ -25,7 +26,6 @@ class Controller
         }
 
         $this->_f3->set("playlist", $playlist);
-        $this->_f3->set("songs", $dataLayer->getSongsFromIds($playlist->getSongIds()));
 
         $view = new Template();
         echo $view->render('views/home.html');
@@ -36,6 +36,8 @@ class Controller
         if (empty($_SESSION['logged'])) {
             $this->_f3->reroute("/login");
         }
+        $this->_f3->set("SESSION.prev", $this->_f3->get("PATH"));
+
 
         global $dataLayer;
 
@@ -71,7 +73,6 @@ class Controller
             die($str);
         }
 
-        global $dataLayer;
         // add
         if ($action === $actions[0]) {
             $_SESSION['logged']->getPlaylist()->addSong($song_id);
@@ -84,6 +85,46 @@ class Controller
         $previous = $this->_f3->get('GET.prev');
         if (!empty($previous))
         $this->_f3->reroute($previous);
+    }
+
+    public function ajax()
+    {
+        global $dataLayer;
+        if (!($this->_f3->get("SESSION.prev") === "/search")) {
+            if (empty($_SESSION['logged'])) {
+                $playlist = new Playlist("Example Playlist", Publicity::PUBLIC());
+                $song_ids = array_map(function ($item) {return $item['song']['id'];}, $dataLayer->getSongs(50));
+                $playlist->setSongIds($song_ids);
+            } else {
+                $playlist = $_SESSION['logged']->getPlaylist();
+            }
+        } else {
+            $playlist = new Playlist("All Songs", Publicity::PUBLIC());
+            $songs = array_map(function ($item) {return $item['song']['id'];}, $dataLayer->getSongs());
+            $playlist->setSongIds($songs);
+        }
+        $songs = $dataLayer->getSongsFromIds($playlist->getSongIds());
+
+
+        $object = array("data"=>array());
+        foreach($songs as $item)
+        {
+            if (!empty($_SESSION['logged']) && !in_array($item['song']['id'], $_SESSION['logged']->getPlaylist()->getSongIds())) {
+                $songToggle = "<button class=\"btn btn-link apiButton\" data-path=\"" . $this->_f3->get('BASE') . "/api/song/add/" . $item['song']['id'] . "\">Add</button>";
+            } else {
+                $songToggle = "<button class=\"btn btn-link apiButton\" data-path=\"" . $this->_f3->get('BASE') . "/api/song/remove/" . $item['song']['id'] . "\">Remove</button>";
+            }
+            $temp = array(
+                $songToggle,
+                $item['song']['title'],
+                $item['artist']['name'],
+                $item['artist']['terms'],
+                "" . number_format($item['song']['duration'] / 60, 2) . " mins",
+                $item['song']['year'] == 0 ? "Unknown" : $item['song']['year']
+            );
+            array_push($object["data"], $temp);
+        }
+        echo json_encode($object);
     }
 
     public function login()

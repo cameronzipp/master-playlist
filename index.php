@@ -53,10 +53,10 @@ $f3->route('GET /logout', function($f3, $params) {
     $con->logout();
 });
 
-//$f3->route('GET /temp/@id', function ($f3, $params) {
-//    global $con;
-//    $con->temp();
-//});
+$f3->route('GET /ajax', function($f3, $params) {
+    global $con;
+    $con->ajax();
+});
 
 //run fat-free
 $f3->run();
