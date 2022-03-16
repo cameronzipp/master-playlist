@@ -31,8 +31,10 @@ button {
     color: white;
 }
 footer {
-    position: fixed;
-    bottom: 0;
+    min-height: 100px;
+    margin-bottom: 0px;
+    clear: both;
+    color: white;
 }
 .box {
     width: 400px;
