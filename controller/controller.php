@@ -1,13 +1,16 @@
 <?php
 
+/**
+ * The Controller class where all the routes are stored
+ */
 class Controller
 {
-    private $_f3;
+    private Base $_f3;
 
     /**
-     * @param $_f3
+     * @param Base $_f3
      */
-    public function __construct($_f3)
+    public function __construct(Base $_f3)
     {
         $this->_f3 = $_f3;
     }
@@ -18,9 +21,7 @@ class Controller
 
         global $dataLayer;
         if (empty($_SESSION['logged'])) {
-            $playlist = new Playlist("Example Playlist", Publicity::PUBLIC());
-            $songs = array_map(function ($item) {return $item['song']['id'];}, $dataLayer->getSongs(50));
-            $playlist->setSongIds($songs);
+            $playlist = Util::create_playlist("Example Playlist", 50);
         } else {
             $playlist = $_SESSION['logged']->getPlaylist();
         }
@@ -41,9 +42,7 @@ class Controller
 
         global $dataLayer;
 
-        $playlist = new Playlist("All Songs", Publicity::PUBLIC());
-        $songs = array_map(function ($item) {return $item['song']['id'];}, $dataLayer->getSongs());
-        $playlist->setSongIds($songs);
+        $playlist = Util::create_playlist("All Songs");
 
         $this->_f3->set("playlist", $playlist);
         $this->_f3->set("songs", $dataLayer->getSongsFromIds($playlist->getSongIds()));
@@ -92,39 +91,18 @@ class Controller
         global $dataLayer;
         if (!($this->_f3->get("SESSION.prev") === "/search")) {
             if (empty($_SESSION['logged'])) {
-                $playlist = new Playlist("Example Playlist", Publicity::PUBLIC());
-                $song_ids = array_map(function ($item) {return $item['song']['id'];}, $dataLayer->getSongs(50));
-                $playlist->setSongIds($song_ids);
+                $playlist = Util::create_playlist("Example Playlist", 50);
             } else {
                 $playlist = $_SESSION['logged']->getPlaylist();
             }
         } else {
-            $playlist = new Playlist("All Songs", Publicity::PUBLIC());
-            $songs = array_map(function ($item) {return $item['song']['id'];}, $dataLayer->getSongs());
-            $playlist->setSongIds($songs);
+            $playlist = Util::create_playlist("All Songs");
         }
         $songs = $dataLayer->getSongsFromIds($playlist->getSongIds());
 
+        $object = Util::createJsonObject($songs, $this->_f3);
 
-        $object = array("data"=>array());
-        foreach($songs as $item)
-        {
-            if (!empty($_SESSION['logged']) && !in_array($item['song']['id'], $_SESSION['logged']->getPlaylist()->getSongIds())) {
-                $songToggle = "<button class=\"btn btn-link apiButton\" data-path=\"" . $this->_f3->get('BASE') . "/api/song/add/" . $item['song']['id'] . "\">Add</button>";
-            } else {
-                $songToggle = "<button class=\"btn btn-link apiButton\" data-path=\"" . $this->_f3->get('BASE') . "/api/song/remove/" . $item['song']['id'] . "\">Remove</button>";
-            }
-            $temp = array(
-                $songToggle,
-                $item['song']['title'],
-                $item['artist']['name'],
-                $item['artist']['terms'],
-                "" . number_format($item['song']['duration'] / 60, 2) . " mins",
-                $item['song']['year'] == 0 ? "Unknown" : $item['song']['year']
-            );
-            array_push($object["data"], $temp);
-        }
-        echo json_encode($object);
+        echo $object;
     }
 
     public function login()

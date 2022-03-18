@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Stores all the validation methods used throughout the application.
+ */
 class Validator
 {
 
@@ -17,7 +20,7 @@ class Validator
     /**
      * Validates usernames
      * @param string $username
-     * @return bool
+     * @return bool true if valid, false otherwise
      */
     static function validUsername($username)
     {
@@ -29,8 +32,8 @@ class Validator
 
     /**
      * Validates passwords
-     * @param $password
-     * @return bool
+     * @param string $password
+     * @return bool true if valid, false otherwise
      */
     static function validPassword($password)
     {
@@ -42,8 +45,8 @@ class Validator
 
     /**
      * Validates a users email
-     * @param $email
-     * @return void
+     * @param string $email
+     * @return bool true if valid, false otherwise
      */
     static function validEmail($email): bool
     {

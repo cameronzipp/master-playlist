@@ -19,17 +19,19 @@ $f3 = Base::instance();
 $con = new Controller($f3);
 $dataLayer = new DataLayer();
 
-//define default route
+//define the default route
 $f3->route('GET /', function($f3, $params) {
     global $con;
     $con->home();
 });
 
+//define the search route
 $f3->route('GET /search', function($f3, $params) {
     global $con;
     $con->search();
 });
 
+//define the song api route
 $f3->route('GET /api/song/@action/@song_id', function($f3, $params) {
     global $con;
     $con->api();
@@ -53,6 +55,7 @@ $f3->route('GET /logout', function($f3, $params) {
     $con->logout();
 });
 
+//define the ajax route
 $f3->route('GET /ajax', function($f3, $params) {
     global $con;
     $con->ajax();

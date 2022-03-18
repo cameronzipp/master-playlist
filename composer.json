@@ -1,6 +1,6 @@
 {
   "name": "master-playlist",
-  "description":"Master Playlist is a Web and Mobile application that uses the Music Corgis dataset to create and manage music playlists and favorite songs.",
+  "description":"Master Playlist is a Web application that uses the Music Corgis dataset to create and manage song playlists.",
   "minimum-stability": "stable",
   "license": "proprietary",
   "authors": [
@@ -19,7 +19,6 @@
   ],
   "require": {
     "bcosca/fatfree-core": "dev-master",
-    "php-ds/php-ds": "^1.4",
     "myclabs/php-enum": "^1.8"
   },
   "autoload": {

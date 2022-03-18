@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * UNUSED CLASS
+ *
+ * THIS CLASS IS CURRENTLY NOT BEING USED. IT MIGHT BE USED IN THE FUTURE.
+ */
 class Song
 {
     private string $_id;
@@ -10,6 +15,7 @@ class Song
     private string $_release_year;
 
     /**
+     * The song constructor
      * @param string $_id
      * @param string $_title
      * @param string $_duration
@@ -26,7 +32,8 @@ class Song
     }
 
     /**
-     * @return string
+     * Gets the song title
+     * @return string the song title
      */
     public function getTitle(): string
     {
@@ -34,7 +41,8 @@ class Song
     }
 
     /**
-     * @param string $title
+     * Sets the song title
+     * @param string $title the song title
      */
     public function setTitle(string $title): void
     {
@@ -42,23 +50,26 @@ class Song
     }
 
     /**
-     * @return Artist
+     * Gets the artist's name
+     * @return string the artist's name
      */
-    public function getArtist(): Artist
+    public function getArtist(): string
     {
         return $this->_artist;
     }
 
     /**
-     * @param Artist $artist
+     * Sets the artist's name
+     * @param string $artist
      */
-    public function setArtist(Artist $artist): void
+    public function setArtist(string $artist): void
     {
         $this->_artist = $artist;
     }
 
     /**
-     * @return string
+     * Gets the duration of the song
+     * @return string the song duration
      */
     public function getDuration(): string
     {
@@ -66,7 +77,8 @@ class Song
     }
 
     /**
-     * @param string $duration
+     * Sets the song duration
+     * @param string $duration the song duration
      */
     public function setDuration(string $duration): void
     {
@@ -74,7 +86,8 @@ class Song
     }
 
     /**
-     * @return string
+     * Gets the song's release year
+     * @return string the song's release year
      */
     public function getReleaseYear(): string
     {
@@ -82,10 +95,11 @@ class Song
     }
 
     /**
-     * @param string $release_date
+     * Sets the song's release year
+     * @param string $release_year the song's release year
      */
-    public function setReleaseYear(string $release_date): void
+    public function setReleaseYear(string $release_year): void
     {
-        $this->_release_year = $release_date;
+        $this->_release_year = $release_year;
     }
 }

@@ -1,3 +1,4 @@
+<!-- Home page -->
 <include href="views/header.html"></include>
 <body>
     <include href="views/navbar.html"></include>
@@ -21,39 +22,6 @@
         </table>
     </div>
     <include href="views/footer.html"></include>
-    <script>
-        function handleApi() {
-            $('button').click(function (event) {
-                const target = event.target;
-                const path = event.target.getAttribute('data-path');
-                $.ajax(path).done(function () {
-                    if (target.innerText === "Add") {
-                        event.target.innerText = "Remove";
-                        event.target.setAttribute('data-path', path.replace('add', 'remove'));
-                    } else {
-                        if ("{{ @PATH }}" === "/") {
-                            const table = $('#songData').DataTable();
-                            table.ajax.reload(handleApi, false);
-                        } else {
-                            event.target.innerText = "Add";
-                            event.target.setAttribute('data-path', path.replace('remove', 'add'));
-                        }
-                    }
-                });
-            });
-        }
-
-        $(document).ready(function () {
-            $('#songData').DataTable({
-                <check if="{{ substr(@PATH, 0, strlen(@PATH)) === '/' }}">
-                    searching: false,
-                </check>
-                lengthChange: false,
-                ajax: '{{ @BASE }}/ajax',
-                stateSave: true,
-                initComplete: handleApi
-            });
-        })
-    </script>
+    <script src="scripts/dataTable.js"></script>
 </body>
 </html>

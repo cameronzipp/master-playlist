@@ -18,7 +18,7 @@
  *     playlist_id INT(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
  *   user_id INT(5),
  *   name VARCHAR(50),
- *   publicity ENUM('public', 'private', 'friends_only')
+ *   visibility ENUM('public', 'private', 'friends_only')
  * );
  *
  * CREATE TABLE songs (
@@ -39,6 +39,10 @@ class DataLayer
     private PDO $_dbh;
     private array $_api;
 
+
+    /**
+     * The DataLayer constructor. Instantiates the databas and json file.
+     */
     public function __construct()
     {
         try {
@@ -53,7 +57,12 @@ class DataLayer
         $this->_api = json_decode($music_json, true);
     }
 
-    public function getSongs($limit = null)
+    /**
+     * Gets the json array. If a $limit is set, then the array will be truncated to that amount.
+     * @param int|null $limit if an int, the length of the array to truncate to; if null, the full array.
+     * @return array the json array of songs
+     */
+    public function getSongs(int $limit = null)
     {
         if ($limit === null) {
             return $this->_api;
@@ -62,6 +71,11 @@ class DataLayer
         return array_slice($this->_api, 0, $limit);
     }
 
+    /**
+     * Gets the songs based on the song id's and returns them in an array
+     * @param array $songIds the array of song id's to look up
+     * @return array an array of songs
+     */
     public function getSongsFromIds(array $songIds)
     {
         return array_filter($this->_api, function($item) use ($songIds) {
@@ -69,6 +83,11 @@ class DataLayer
         });
     }
 
+    /**
+     * Gets a song based on it's id
+     * @param $song_id the song id to look up
+     * @return false|array-key returns false if the song was not found, otherwise returns the song
+     */
     public function getSong($song_id)
     {
         $song = false;
@@ -81,6 +100,12 @@ class DataLayer
         return $song;
     }
 
+    /**
+     * Inserts a song id into a playlist database.
+     * @param string $playlist_id the playlist that the song is a part of
+     * @param string $song_id the id of the song in the playlist
+     * @return string the id of the last inserted column
+     */
     public function insertSongToPlaylist($playlist_id, $song_id)
     {
         $sql = "INSERT INTO song (playlist_id, song_id)
@@ -107,6 +132,11 @@ class DataLayer
         return $this->_dbh->lastInsertId();
     }
 
+    /**
+     * Deletes a song id from a playlist database.
+     * @param string $playlist_id the playlist that the song is a part of
+     * @param string $song_id the id of the song in the playlist
+     */
     public function removeSongFromPlaylist($playlist_id, $song_id)
     {
         $sql = "DELETE FROM song WHERE playlist_id = :playlist_id AND song_id = :song_id";
@@ -170,8 +200,8 @@ class DataLayer
      */
     public function insertPlaylist(User $user): string
     {
-        $sql = "INSERT INTO playlist (user_id, name, publicity)
-                VALUES (:user_id, :name, :publicity)";
+        $sql = "INSERT INTO playlist (user_id, name, visibility)
+                VALUES (:user_id, :name, :visibility)";
 
         $statement = false;
         try {
@@ -183,7 +213,7 @@ class DataLayer
         $params = array(
             ':user_id'   => $user->getId(),
             ':name'      => "My Playlist",
-            ':publicity' => Publicity::PUBLIC()
+            ':visibility' => Visibility::PUBLIC()
         );
 
         try {
@@ -196,28 +226,11 @@ class DataLayer
     }
 
     /**
-     * Gets the last saved user's Id.
-     * @return false|int returns the last saved user id, returns false if it can't
+     * Gets the user from the database
+     * @param string $user_id the id of the user
+     * @return array returns the user column from the database
      */
-    public function getLastUserId()
-    {
-        $sql = "SELECT user_id FROM user ORDER BY user_id DESC LIMIT 1";
-
-        $statement = $this->_dbh->prepare($sql);
-
-        $statement->execute();
-
-        $result = $statement->fetch();
-
-        return $result ? intval($result["user_id"]) : false;
-    }
-
-    /**
-     * grabs the user
-     * @param int|string $user_id
-     * @return array|false
-     */
-    public function getUser($user_id)
+    public function getUser(string $user_id)
     {
         $sql = "SELECT * FROM user WHERE user_id = :user_id";
 
@@ -241,10 +254,10 @@ class DataLayer
 
     /**
      * grabs the user based on the user's username
-     * @param string $user_username
-     * @return array|false
+     * @param string $user_username the user's username
+     * @return array|false returns the user in the column, false otherwise
      */
-    public function getUserByUsername($user_username)
+    public function getUserByUsername(string $user_username)
     {
         $sql = "SELECT * FROM user WHERE username = :username";
 
@@ -265,6 +278,11 @@ class DataLayer
         return $statement->fetch();
     }
 
+    /**
+     * Gets the specified playlist
+     * @param string $playlist_id the id of the playlist
+     * @return array the playlist column from the table
+     */
     public function getPlaylist($playlist_id)
     {
         $sql = "SELECT * FROM playlist WHERE playlist_id = :playlist_id";
@@ -286,6 +304,11 @@ class DataLayer
         return $statement->fetch();
     }
 
+    /**
+     * Gets the playlist associated with a user id
+     * @param string $user_id the id of the user that is attached to the playlist
+     * @return array|false returns the playlist column, otherwise false
+     */
     public function getPlaylistFromUserId($user_id)
     {
         $sql = "SELECT * FROM playlist WHERE user_id = :user_id";
@@ -307,6 +330,11 @@ class DataLayer
         return $statement->fetch();
     }
 
+    /**
+     * Gets the songs based on the playlist id
+     * @param string $playlist_id the playlist id to use to search up all the songs
+     * @return array returns all the song id's associated with the playlist id
+     */
     public function getSongsFromPlaylistId($playlist_id): array
     {
         $sql = "SELECT song_id FROM `song` WHERE playlist_id = :playlist_id";
